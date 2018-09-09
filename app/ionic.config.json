@@ -1,0 +1,7 @@
+{
+  "name": "LemonApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

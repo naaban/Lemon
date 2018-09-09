@@ -1,0 +1,51 @@
+page-login {
+
+    .background{
+        background: linear-gradient(250deg,#ddc806,#ddda11,#d6d30f,#f8f403,#b3ff00,#90dd00,#8cc800);
+
+        background-size: 400% 400%;
+        animation: colorchange 25s ease-out infinite;
+
+
+    }
+    @keyframes colorchange {
+        0%{background-position: 0% 99%}
+        50%{background-position: 100% 1%}
+        100%{background-position: 1% 90%}
+        
+    }
+    .scroll-conten{
+        text-align: center;
+    }
+    .itemback{
+        background-image: url(../../assets/imgs/edittext_indent.png);
+    }
+    .transprancy{
+        background: #fff;
+        margin: 0 auto;
+        opacity: 50%;
+        width: 100%;
+    
+    }
+    ion-card.card{
+
+        background: rgba(232,230,230,0.6px);
+        border-radius: 10px;
+        margin-top: 30%;
+    
+    }
+
+    .item{
+        
+        background: rgba(232,230,230,0px);
+    }
+
+    ion-item.item{
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+        background: #fff;
+
+    }
+   
+}
