@@ -22,7 +22,7 @@ class DbHandler {
         require_once 'PassHash.php';
         $response = array();
 
-        if(!this->isUserExists($email)){
+        if(!$this->isUserExists($email)){
 
             // Generating password hash
             $password_hash = PassHash::hash($password);
@@ -190,33 +190,52 @@ class DbHandler {
      * @param array $data uploaded by admin
      */
 
-    private function addProduct($data){
+    private function addProduct($product_type,$product_name, $product_des ,$price , $instock , $coupon_code){
 
         $response = array();
-        for($i=0 ; $i<sizeof($data) ; $i++){
         $stmt = $this->conn->prepare("INSERT INTO products(product_type , product_name , product_des ,price , instock , coupon_code ) VALUES ( ? ,? ,? , ?, ?)");
-        $stmt = $this->bind_params("ssss",$data['product_type'][$i] , $data['product_name'][$i] , $data['product_des'][$i] ,$data['price'][$i],$data['instock'][$i] , $data['coupon_code'][]);
+        $stmt = $this->bind_params("issiis",$product_type,$product_name, $product_des ,$price , $instock , $coupon_code );
         $result = $stmt->execute();
-        if($result){
-            return PRODUCT_CREATED_SUCCESSFULLY ." ". $data['product_name'][$i];
-        }
-        else{
-            return PRODUCT_CREATE_FAILED ." ". $data['product_name'][$i];
-        }
-        }
         $stmt->close();
-    else{
-        return PRODUCT_ALREADY_EXISTED;
-    }
-    return $response;
+          return $response;
 
     }
 
     private function getProducts(){
-        $stmt = $this->conn->prepare("SELECT * FROM products");
-        $stmt->execute();
-        $result = $stmt->   
+        $stmt = $this->conn->prepare("SELECT * FROM products as prod JOIN attributes as attr ON attr.attribute_id = prod.product_type");
+        if($stmt->execute()){
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $result;
+        }
+        else {
+            return NULL;
+        }
+        
      }
+
+     private function updateProduct($product_type,$product_name, $product_des ,$price , $instock , $coupon_code,$product_id){
+
+        $response = array();
+        $stmt = $this->conn->prepare("UPDATE products SET product_type = ? , product_name = ?, product_des = ?,price = ?, instock = ?, coupon_code = ? WHERE product_id = ?");
+        $stmt = $this->bind_params("issiisi",$product_type,$product_name, $product_des ,$price , $instock , $coupon_code ,$product_id);
+        $result = $stmt->execute();
+        $num_affected_rows = $stmt->affected_rows;
+        $stmt->close();
+
+          return $num_affected_rows > 0;
+
+    }
+
+    private function deleteProduct($product_id){
+        $stmt = $this->conn->prepare("DELETE product FROM products product, cart carts WHERE products.product_id = ? AND carts.product_id = t.id AND ut.user_id = ?");
+        $stmt->bind_param("ii", $task_id, $user_id);
+        $stmt->execute();
+        $num_affected_rows = $stmt->affected_rows;
+        $stmt->close();
+        return $num_affected_rows > 0;
+
+    }
 
 }
 ?>
